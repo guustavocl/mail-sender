@@ -1,0 +1,32 @@
+version: "3"
+
+volumes:
+  data:
+
+networks:
+  npm:
+    external: true
+
+services:
+  mail-sender:
+    image: mail-sender-image
+    container_name: mail-sender
+    restart: unless-stopped
+    environment:
+      - NODE_ENV="production"
+    networks:
+      - npm
+
+  redis:
+    image: bitnami/redis:latest
+    container_name: redis
+    restart: unless-stopped
+    environment:
+      - ALLOW_EMPTY_PASSWORD=no
+      - REDIS_PASSWORD="redispasswd"
+    ports:
+      - "6379:6379"
+    networks:
+      - npm
+    volumes:
+      - data:/bitnami/redis/data

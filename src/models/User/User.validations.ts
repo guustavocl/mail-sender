@@ -2,34 +2,29 @@ import { Types } from "mongoose";
 import { z } from "zod";
 
 const create = z.object({
-  body: z
-    .object({
-      name: z
-        .string({
-          required_error: "Name is required",
-        })
-        .min(1, "Name must have more than 1 char"),
-      email: z
-        .string({
-          required_error: "Email is required",
-        })
-        .toLowerCase()
-        .email("Insert a valid email"),
-      password: z
-        .string({
-          required_error: "Password is required",
-        })
-        .min(6, "Must be at least 6 characters length"),
-      confirmPassword: z
-        .string({
-          required_error: "Password confirmation is required",
-        })
-        .min(6, "Must be at least 6 characters length"),
-    })
-    .refine(data => data.password === data.confirmPassword, {
-      message: "Passwords must match!",
-      path: ["confirmPassword"],
+  body: z.object({
+    name: z
+      .string({
+        required_error: "Name is required",
+      })
+      .min(1, "Name must have more than 1 char"),
+    email: z
+      .string({
+        required_error: "Email is required",
+      })
+      .toLowerCase()
+      .email("Insert a valid email"),
+    quota: z
+      .string({
+        required_error: "Quota is required",
+      })
+      .transform(quota => {
+        return parseInt(quota);
+      }),
+    isAdmin: z.string().transform(isAdmin => {
+      return Boolean(isAdmin);
     }),
+  }),
 });
 
 const findOne = z.object({

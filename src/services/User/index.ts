@@ -1,4 +1,5 @@
 import { create } from "./user.create";
-import { findOne, findAll, findByEmail } from "./user.find";
+import { findAll, findByEmail, findByToken, findOne } from "./user.find";
+import { quotaReached, updateQuota } from "./user.quota";
 
-export const UserService = { create, findOne, findAll, findByEmail };
+export const UserService = { create, findOne, findAll, findByEmail, findByToken, quotaReached, updateQuota };

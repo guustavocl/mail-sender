@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
-import bcrypt from "bcryptjs";
-import { UserProps } from "./User.types";
 import mongoosePaginate from "mongoose-paginate-v2";
+import { createNewToken } from "../../utils/token";
+import { UserProps } from "./User.types";
 
 const UserSchema = new mongoose.Schema(
   {
@@ -18,13 +18,17 @@ const UserSchema = new mongoose.Schema(
       maxLength: [50, "Email must be less than 50 characters length"],
       unique: true,
     },
-    password: {
-      type: String,
-      required: [true, "Please inform your password"],
-      minLength: [6, "Password must be at least 6 characters length"],
+    quota: {
+      type: Number,
+      required: true,
     },
-    isEmailConfirmed: { type: Boolean, default: false },
-    isBanned: { type: Boolean, default: false },
+    sended: {
+      type: Number,
+      default: 0,
+    },
+    token: {
+      type: String,
+    },
     isAdmin: { type: Boolean, default: false },
   },
   {
@@ -43,21 +47,16 @@ const UserSchema = new mongoose.Schema(
   }
 );
 
-UserSchema.plugin(mongoosePaginate);
-
-UserSchema.methods.isPasswordMatch = async function (password: string) {
-  const user = this as UserProps;
-  return bcrypt.compare(password, user.password);
-};
-
 UserSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) {
+  if (!this.isModified("email")) {
     return next();
   }
-  const hash = await bcrypt.hash(this.password || "", bcrypt.genSaltSync(12));
-  this.password = hash;
+  const token = await createNewToken(this?.email || "");
+  this.token = token;
   next();
 });
+
+UserSchema.plugin(mongoosePaginate);
 
 UserSchema.path("email").validate(
   async (email: string) => {

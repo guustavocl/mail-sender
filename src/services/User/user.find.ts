@@ -11,6 +11,10 @@ export const findAll = async (filter: FilterQuery<UserProps>, options: PaginateO
   return users;
 };
 
+export const findByToken = async (token: string) => {
+  return await User.findOne({ token: token });
+};
+
 export const findByEmail = async (email: string) => {
   return await User.findOne({ email: email });
 };

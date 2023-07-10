@@ -9,7 +9,7 @@ import { validate } from "../utils/validate";
 const create = catchAsync(async (req, res) => {
   const { body } = await validate(UserValidations.create, req);
   const user = await UserService.create(body);
-  res.send({ message: "User successfully createad", email: user?.email });
+  res.send({ message: "User successfully createad", user: user });
 });
 
 const getOne = catchAsync(async (req, res) => {

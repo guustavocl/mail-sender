@@ -1,8 +1,8 @@
 {
-  "name": "typescript-express-boilerplate",
+  "name": "mail-sender",
   "version": "1.0.0",
-  "description": "just a typescript boilerplate to start a express.js api",
-  "repository": "https://github.com/guustavocl/typescript-express-boilerplate",
+  "description": "just a mail service queue that uses Amazon SES to send emails",
+  "repository": "https://github.com/guustavocl/mail-sender",
   "author": "@guustavocl - https://gus.sh/",
   "license": "MIT",
   "main": "src/index.ts",
@@ -13,8 +13,10 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
+    "aws-sdk": "^2.1413.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
+    "bull": "^4.10.4",
     "connect-timeout": "^1.9.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",

@@ -3,12 +3,9 @@ import { Document } from "mongoose";
 export interface UserProps extends Document {
   name: string;
   email: string;
-  password: string;
-  confirmPassword: string;
-  loginCount: string;
-  lastLoginIP: string;
-  lastLoginDate: Date;
-  isEmailConfirmed: boolean;
+  token: string;
+  quota: number;
+  sended: number;
   isBanned: boolean;
   isAdmin: boolean;
   createdAt: Date;

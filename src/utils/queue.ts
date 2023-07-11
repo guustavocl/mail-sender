@@ -57,7 +57,7 @@ export const massAddToQueue = async (data: MailProps, user: UserProps) => {
         to: jobData.email,
         toName: jobData.name,
         subject: data.subject,
-        text: data.text,
+        message: data.text,
         html: data.html,
         setName: data.setName,
         user: user,

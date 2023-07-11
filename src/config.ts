@@ -27,7 +27,4 @@ export const config = {
     password: process.env.REDIS_PWD || "",
   },
   sesClient: SESClient,
-  jwtSecret: process.env.JWT_SECRET || "",
-  jwtExpiresIn: "24h",
-  authCookie: "express_auth",
 };

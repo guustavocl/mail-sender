@@ -73,7 +73,8 @@ export const massAddToQueue = async (data: MailProps, user: UserProps) => {
 const startProcessQueue = () => {
   console.log("start queue proccess");
   mailQueue.process(async job => {
-    console.log("neww process: ", job.data);
+    console.log("neww process: ", job.data.from);
+    console.log("neww process: ", job.data.user.email);
     try {
       const updatedUser = await updateQuota(job.data.user.email);
       if (updatedUser && !quotaReached(updatedUser)) {

@@ -23,7 +23,6 @@ export const send = async (mail: MailProps, setName = "default") => {
   if (mail.text) messageBody.Text = { Data: mail.text };
 
   if (mail.html) messageBody.Html = { Data: mail.html };
-  console.log(mail);
   try {
     await SESClient.sendEmail({
       Source: `${mail.fromName || mail.from}<${mail.from}>`,

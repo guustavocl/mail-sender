@@ -24,6 +24,8 @@ services:
     environment:
       - ALLOW_EMPTY_PASSWORD=no
       - REDIS_PASSWORD="redispasswd"
+    ports:
+      - 6379:6379
     networks:
       - npm
     volumes:

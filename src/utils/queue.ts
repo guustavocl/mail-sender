@@ -15,6 +15,7 @@ config.sesClient
   .getSendQuota()
   .promise()
   .then(data => {
+    console.log("max send quota: ", data.MaxSendRate);
     mailQueue = new Bull("mail-queue", {
       defaultJobOptions: {
         removeOnComplete: true,
@@ -39,6 +40,7 @@ config.sesClient
   });
 
 export const addToQueue = async (data: MailProps, user: UserProps) => {
+  console.log("will add to queue");
   if (!mailQueue) throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "Mail queue not found");
   await mailQueue.add({ ...data, user: user });
   console.log("added to queue");

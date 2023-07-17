@@ -7,7 +7,9 @@ import { ApiError } from "../utils/ApiError";
 import httpStatus from "http-status";
 
 const send = catchAsync(async (req, res) => {
+  console.log(req.body);
   const { body } = await validate(MailValidations.send, req);
+  console.log(body);
   if (quotaReached(res.locals.userPayload)) throw new ApiError(httpStatus.FORBIDDEN, "Sended quota reached!");
 
   await addToQueue(body, res.locals.userPayload);

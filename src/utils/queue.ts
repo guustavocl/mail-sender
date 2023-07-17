@@ -41,6 +41,7 @@ config.sesClient
 export const addToQueue = async (data: MailProps, user: UserProps) => {
   if (!mailQueue) throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "Mail queue not found");
   await mailQueue.add({ ...data, user: user });
+  console.log("added to queue");
 };
 
 export const massAddToQueue = async (data: MailProps, user: UserProps) => {
@@ -70,10 +71,13 @@ export const massAddToQueue = async (data: MailProps, user: UserProps) => {
 };
 
 const startProcessQueue = () => {
+  console.log("start queue proccess");
   mailQueue.process(async job => {
+    console.log("neww process: ", job.data);
     try {
       const updatedUser = await updateQuota(job.data.user.email);
       if (updatedUser && !quotaReached(updatedUser)) {
+        console.log("will send");
         MailService.send(job.data);
       }
     } catch (error) {

@@ -15,7 +15,7 @@ config.sesClient
   .getSendQuota()
   .promise()
   .then(data => {
-    console.log("max send quota: ", data.MaxSendRate);
+    logger.info(`Max send rate: ${data.MaxSendRate}`);
     mailQueue = new Bull("mail-queue", {
       defaultJobOptions: {
         removeOnComplete: true,
@@ -40,10 +40,8 @@ config.sesClient
   });
 
 export const addToQueue = async (data: MailProps, user: UserProps) => {
-  console.log("will add to queue");
   if (!mailQueue) throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, "Mail queue not found");
   await mailQueue.add({ ...data, user: user });
-  console.log("added to queue");
 };
 
 export const massAddToQueue = async (data: MailProps, user: UserProps) => {
@@ -73,15 +71,14 @@ export const massAddToQueue = async (data: MailProps, user: UserProps) => {
 };
 
 const startProcessQueue = () => {
-  console.log("start queue proccess");
   mailQueue.process(async job => {
-    console.log("neww process: ", job.data.from);
-    console.log("neww process: ", job.data.user.email);
+    logger.info(`Start new proccess, will try to send email to: ${job.data?.to} - from: ${job.data?.from}`);
     try {
       const updatedUser = await updateQuota(job.data.user.email);
       if (updatedUser && !quotaReached(updatedUser)) {
-        console.log("will send");
         MailService.send(job.data);
+      } else {
+        logger.info(`Max quota reeched for user: ${job.data?.user.email}`);
       }
     } catch (error) {
       logger.error("Error on Process queue");

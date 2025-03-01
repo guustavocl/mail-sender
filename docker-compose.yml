@@ -1,11 +1,7 @@
 version: "3"
 
 volumes:
-  data:
-
-networks:
-  npm:
-    external: true
+  redis_data:
 
 services:
   mail-sender:
@@ -13,9 +9,12 @@ services:
     container_name: mail-sender
     restart: unless-stopped
     environment:
-      - NODE_ENV="production"
-    networks:
-      - npm
+      - NODE_ENV=production
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - redis
 
   redis:
     image: bitnami/redis:latest
@@ -23,10 +22,6 @@ services:
     restart: unless-stopped
     environment:
       - ALLOW_EMPTY_PASSWORD=no
-      - REDIS_PASSWORD="redispasswd"
-    ports:
-      - 6379:6379
-    networks:
-      - npm
+      - REDIS_PASSWORD=redispasswd
     volumes:
-      - data:/bitnami/redis/data
+      - redis_data:/bitnami/redis/data
